@@ -14,7 +14,9 @@ You need to install a Postgre client on your machine.
 For Ubuntu:
 
 ```
-sudo apt-get install libpq-dev
+sudo apt-get install libpq-dev # for psycopg internally
+sudo apt install postgresql-client-common # to run restore
+sudo apt-get install postgresql-client
 ```
 
 ## Python virutal env
@@ -24,3 +26,11 @@ sudo apt-get install libpq-dev
 ## Python version
 
 3.6.9
+
+## TODO
+
+- [ ] Run a postgre db
+- [ ] Connect to the db
+- [ ] Send backups to the db
+- [ ] Create a Jupyter lab to visualize missions using Bokeh
+- [ ] Run scripts with nltk
