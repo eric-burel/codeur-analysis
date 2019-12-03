@@ -19,6 +19,14 @@ sudo apt install postgresql-client-common # to run restore
 sudo apt-get install postgresql-client
 ```
 
+## Load dumps
+
+Dumps should be stored at the root of the `./dumps` folder.
+
+```
+PGPASSWORD="admin123" ./load_backup.py
+```
+
 ## Python virutal env
 
 `source ./venv/bin/activate`
@@ -29,8 +37,10 @@ sudo apt-get install postgresql-client
 
 ## TODO
 
-- [ ] Run a postgre db
-- [ ] Connect to the db
-- [ ] Send backups to the db
+- [x] Run a postgre db
+- [x] Connect to the db
+- [x] Send backups to the db
 - [ ] Create a Jupyter lab to visualize missions using Bokeh
-- [ ] Run scripts with nltk
+- [ ] Run scripts with nltk to analyze text
+- [ ] Automate dump loading
+- [ ] Improve scraper to get more infos

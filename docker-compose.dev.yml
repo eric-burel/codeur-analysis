@@ -4,13 +4,13 @@ services:
 
   db:
     image: postgres
-    restart: always
+#    restart: always
     environment:
       POSTGRES_PASSWORD: admin123
     ports:
       - 5432:5432
   adminer:
     image: adminer
-    restart: always
+#    restart: always
     ports:
       - 8080:8080
