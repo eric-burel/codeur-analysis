@@ -1,3 +1,5 @@
 venv
 include
 mode-bridge.env
+dumps/
+.env

@@ -1,11 +1,14 @@
 #! ./venv/bin/python
-import psycopg2
+#import psycopg2
 import subprocess
 import glob
+import os
 
 
 # List files
-files = glob.glob("./dumps/*")
+files = [
+    f for f in glob.glob("./dumps/**/*")
+]
 print("Restoring dumps", files)
 
 for f in files:
@@ -14,7 +17,7 @@ for f in files:
     subprocess.run([
         "pg_restore",
         "--verbose",
-        "--clean",
+        #"--clean", # Do NOT clean otherwise only the last dump is used
         "--no-acl",
         "--no-owner",
         "-h",  "localhost",

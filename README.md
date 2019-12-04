@@ -21,7 +21,7 @@ sudo apt-get install postgresql-client
 
 ## Load dumps
 
-Dumps should be stored at the root of the `./dumps` folder.
+Dumps should be stored in the `./dumps` folder (at the root or nested).
 
 ```
 PGPASSWORD="admin123" ./load_backup.py
