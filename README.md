@@ -35,12 +35,25 @@ PGPASSWORD="admin123" ./load_backup.py
 
 3.6.9
 
+## Use Jupyter
+
+You need to create a Kernel for the local virtual env.
+https://janakiev.com/blog/jupyter-virtual-envs/
+
+```
+pip install --user ipykernel
+python -m ipykernel install --user --name=myenv
+```
+
 ## Access data through Mode Analytics
 
 Use a [Bridge Connector](https://mode.com/help/articles/how-mode-connects/#run-bridge-in-a-docker-container) to connect to the local database.
 
 Run it in Docker.
 
+```
+docker start mode-bridge
+```
 
 ## TODO
 

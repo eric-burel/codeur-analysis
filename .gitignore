@@ -3,3 +3,4 @@ include
 mode-bridge.env
 dumps/
 .env
+.ipynb_checkpoints/
