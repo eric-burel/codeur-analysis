@@ -60,7 +60,8 @@ docker start mode-bridge
 - [x] Run a postgre db
 - [x] Connect to the db
 - [x] Send backups to the db
-- [ ] Actually handle multiple restore (right now pg_restore produce errors)
+- [X] Actually handle multiple restore (right now pg_restore produce errors)
+- [ ] Fix dup deletion => will remove ALL copies
 - [ ] Create a Jupyter lab to visualize missions using Bokeh
 - [ ] Run scripts with nltk to analyze text
 - [ ] Automate dump loading
