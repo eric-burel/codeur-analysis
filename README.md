@@ -38,11 +38,7 @@ Dumps should be stored in the `./dumps` folder (at the root or nested).
 PGPASSWORD="admin123" ./load_backup.py
 ```
 
-## Python version
-
-3.6.9
-
-## Use Jupyter
+### Use Jupyter
 
 You need to create a Kernel for the local virtual env.
 https://janakiev.com/blog/jupyter-virtual-envs/
@@ -51,6 +47,10 @@ https://janakiev.com/blog/jupyter-virtual-envs/
 pip install --user ipykernel
 python -m ipykernel install --user --name=myenv
 ```
+
+## Python version
+
+3.6.9
 
 ## Access data through Mode Analytics
 
