@@ -20,7 +20,6 @@ pandas==0.25.3
 parso==0.5.1
 pexpect==4.7.0
 pickleshare==0.7.5
-pkg-resources==0.0.0
 prettytable==0.7.2
 prompt-toolkit==3.0.2
 psycopg2==2.8.3

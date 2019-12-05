@@ -1,4 +1,15 @@
-## Run
+## Install
+
+### Python
+
+```
+python -m venv ./venv
+source ./venv/bin/activate
+pip install -r requirements
+# if you encounter issues with pkg-ressources, just remove it from the requirements.txt
+```
+
+### Database
 
 Run a docker instance of the database.
 DB is available on `localhost:5432`. (default access: "postgres" and "admin123")
@@ -19,17 +30,13 @@ sudo apt install postgresql-client-common # to run restore
 sudo apt-get install postgresql-client
 ```
 
-## Load dumps
+### Load dumps
 
 Dumps should be stored in the `./dumps` folder (at the root or nested).
 
 ```
 PGPASSWORD="admin123" ./load_backup.py
 ```
-
-## Python virutal env
-
-`source ./venv/bin/activate`
 
 ## Python version
 
@@ -60,7 +67,7 @@ docker start mode-bridge
 - [x] Run a postgre db
 - [x] Connect to the db
 - [x] Send backups to the db
-- [X] Actually handle multiple restore (right now pg_restore produce errors)
+- [x] Actually handle multiple restore (right now pg_restore produce errors)
 - [ ] Fix dup deletion => will remove ALL copies
 - [ ] Create a Jupyter lab to visualize missions using Bokeh
 - [ ] Run scripts with nltk to analyze text
