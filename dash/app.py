@@ -194,13 +194,19 @@ def update_graph(results_dump):
         for year_month in all_x
     ]
     # TODO: whats the correct value?
-    x = list(range(0, len(y)))
+    x = ["{}-{}-01".format(year, month)
+         for (year, month) in all_x]  # list(range(0, len(y)))
     return {
         "data": [{
             "x": x,
             "y": y,
             "type": "bar",
-        }]
+        }],
+        "layout": {
+            "xaxis": {
+                "tickformat": "%Y/%m"
+            }
+        }
     }
 
 
