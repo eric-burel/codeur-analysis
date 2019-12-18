@@ -48,6 +48,12 @@ pip install --user ipykernel
 python -m ipykernel install --user --name=myenv
 ```
 
+### Use Dash
+
+```
+python dash/app.py
+```
+
 ## Python version
 
 3.6.9
@@ -68,6 +74,7 @@ docker start mode-bridge
 - [x] Connect to the db
 - [x] Send backups to the db
 - [x] Actually handle multiple restore (right now pg_restore produce errors)
+- [x] Include a Dash dashboard
 - [ ] Fix dup deletion => will remove ALL copies
 - [ ] Create a Jupyter lab to visualize missions using Bokeh
 - [ ] Run scripts with nltk to analyze text
