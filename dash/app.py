@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import psycopg2.extras
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -7,6 +8,8 @@ from datetime import datetime
 import json
 import atexit
 from os import sys
+import pandas as pd
+import utils
 
 # Connect to the db
 import psycopg2
@@ -54,6 +57,11 @@ def search_to_sql_like(search_terms):
 
 MAX_DATE = datetime.now().year
 MIN_DATE = 2016
+
+DEFAULT_DATA = [
+    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+]
+
 app.layout = html.Div(children=[
     html.H1(children='Codeur.com analysis'),
 
@@ -67,25 +75,29 @@ app.layout = html.Div(children=[
     html.Div(
         id="results-summary"
     ),
-    dcc.Slider(
+    dcc.RangeSlider(
         id='year-slider',
         min=MIN_DATE,  # df['year'].min(),
         max=MAX_DATE,  # df['year'].max(),
-        value=MIN_DATE,
+        value=[MIN_DATE, MAX_DATE],
         marks={str(year): str(year)
                for year in range(MIN_DATE, MAX_DATE+1, 1)},
         step=None
     ),
+    # Date picker version (eg for more precise find)
+    # dcc.DatePickerRange(
+    #    id='year-slider',
+    #    min_date_allowed=datetime(MIN_DATE, 1, 1),  # df['year'].min(),
+    #    max_date_allowed=datetime(MAX_DATE, 12, 1),  # df['year'].max(),
+    #    start_date=datetime(MIN_DATE, 1, 1),  # df['year'].min(),
+    #    end_date=datetime(MAX_DATE, 12, 1),  # df['year'].max(),
+    # ),
     dcc.Graph(
-        id='example-graph',
+        id="yearly-graph",
         figure={
-            'data': [
-                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-                {'x': [1, 2, 3], 'y': [2, 4, 5],
-                    'type': 'bar', 'name': u'Montréal'},
-            ],
+            'data': DEFAULT_DATA,
             'layout': {
-                'title': 'Dash Data Visualization'
+                'title': 'Project count per month'
             }
         }
     ),
@@ -100,9 +112,11 @@ app.layout = html.Div(children=[
     [Input(component_id='search-terms', component_property='value'),
      Input(component_id='year-slider', component_property='value')]
 )
-def update_output_div(input_value, year):
+def update_output_div(input_value, years):
     if input_value is None:
         return None
+
+    start_year, end_year = years
 
     query = """
     SELECT
@@ -113,19 +127,20 @@ def update_output_div(input_value, year):
     and published_at >= %(start_year)s
     and published_at <= %(end_year)s
     """
-    cursor = connection.cursor()
+    cursor = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     # Print PostgreSQL version
     cursor.execute(query, {
         "ilike": "%{}%".format(input_value),
-        "start_year": "{}-01-01".format(year),
-        "end_year": "{}-12-31".format(year)
+        "start_year": "{}-01-01".format(start_year),
+        "end_year": "{}-12-31".format(end_year)
     })
     res = cursor.fetchall()
     # 'You\'ve entered "{}"'.format(input_value)
     return json.dumps({
         "data": res,
         "count": len(res),
-        "year": year,
+        "start_year": start_year,
+        "end_year": end_year,
         "terms": input_value
     },
         # default parser (eg for datetime)
@@ -142,9 +157,37 @@ def update_query_summary(results_dump):
     results = json.loads(results_dump)
     #data = results["data"]
     count = results["count"]
-    year = results["year"]
+    start_year = results["start_year"]
+    end_year = results["end_year"]
     terms = results["terms"]
-    return 'Found {} projects for year {} and search terms {}'.format(count, year, terms)
+    return 'Found {} projects for years {} to {} and search terms {}'.format(count, start_year, end_year, terms)
+
+
+# Update history graph
+@app.callback(
+    Output(component_id="yearly-graph", component_property="figure"),
+    [Input(component_id='query-results', component_property="children")]
+)
+def update_graph(results_dump):
+    if results_dump is None:
+        return {"data": DEFAULT_DATA}
+    results = json.loads(results_dump)
+    df = pd.DataFrame(results["data"])
+    utils.split_date(df)
+    df_per_month = utils.per_month(df)
+    per_month_count = utils.count(df_per_month).reset_index()
+    # x = per_month_count.apply(
+    #    axis="columns", func=lambda x: "{:04d}-{:02d}".format(x["year"], x["month"])),  # 2018-01, etc.
+    y = list(per_month_count["count"])
+    x = list(range(0, len(y)))
+    return {
+        "data": [{
+            # "x": x,
+            "x": x,
+            "y": y,
+            "type": "bar",
+        }]
+    }
 
 
 if __name__ == '__main__':
