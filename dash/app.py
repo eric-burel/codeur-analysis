@@ -72,7 +72,8 @@ app.layout = html.Div(children=[
         min=MIN_DATE,  # df['year'].min(),
         max=MAX_DATE,  # df['year'].max(),
         value=MIN_DATE,
-        marks={str(year): str(year) for year in range(MIN_DATE, MAX_DATE, 1)},
+        marks={str(year): str(year)
+               for year in range(MIN_DATE, MAX_DATE+1, 1)},
         step=None
     ),
     dcc.Graph(
@@ -109,11 +110,15 @@ def update_output_div(input_value, year):
     from scraper_codeurproject
     where title ilike %(ilike)s
     or description ilike %(ilike)s
+    and published_at >= %(start_year)s
+    and published_at <= %(end_year)s
     """
     cursor = connection.cursor()
     # Print PostgreSQL version
     cursor.execute(query, {
-        "ilike": "%{}%".format(input_value)
+        "ilike": "%{}%".format(input_value),
+        "start_year": "{}-01-01".format(year),
+        "end_year": "{}-12-31".format(year)
     })
     res = cursor.fetchall()
     # 'You\'ve entered "{}"'.format(input_value)
