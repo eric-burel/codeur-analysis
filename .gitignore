@@ -4,3 +4,4 @@ mode-bridge.env
 dumps/
 .env
 .ipynb_checkpoints/
+__pycache__/

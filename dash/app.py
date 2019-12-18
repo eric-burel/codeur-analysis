@@ -172,10 +172,6 @@ def update_graph(results_dump):
     if results_dump is None:
         return {"data": DEFAULT_DATA}
     results = json.loads(results_dump)
-    df = pd.DataFrame(results["data"])
-    utils.split_date(df)
-    df_per_month = utils.per_month(df)
-    per_month_count = utils.count(df_per_month)
     # compute ticks
     start_year = results["start_year"]
     end_year = results["end_year"]
@@ -183,12 +179,22 @@ def update_graph(results_dump):
              for year in range(start_year, end_year + 1)
              for month in range(1, 12 + 1)
              ]
-    # actual values
-    y_map = {year_month: per_month_count["count"].loc[year_month]
-             for year_month in per_month_count.index}
+    # compute values
+    # as map so we add zeros where they miss (todo: could be done with pandas probably)
+    data = results["data"]
+    if (len(data)):
+        df = pd.DataFrame(data)
+        utils.split_date(df)
+        df_per_month = utils.per_month(df)
+        per_month_count = utils.count(df_per_month)
+        y_map = {
+            year_month: per_month_count["count"].loc[year_month]
+            for year_month in per_month_count.index
+        }
+    else:
+        # no data
+        y_map = {}
 
-    # x = per_month_count.apply(
-    #    axis="columns", func=lambda x: "{:04d}-{:02d}".format(x["year"], x["month"])),  # 2018-01, etc.
     y = [
         y_map[year_month] if year_month in y_map else 0
         for year_month in all_x
