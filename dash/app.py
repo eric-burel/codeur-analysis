@@ -175,14 +175,28 @@ def update_graph(results_dump):
     df = pd.DataFrame(results["data"])
     utils.split_date(df)
     df_per_month = utils.per_month(df)
-    per_month_count = utils.count(df_per_month).reset_index()
+    per_month_count = utils.count(df_per_month)
+    # compute ticks
+    start_year = results["start_year"]
+    end_year = results["end_year"]
+    all_x = [(year, month)
+             for year in range(start_year, end_year + 1)
+             for month in range(1, 12 + 1)
+             ]
+    # actual values
+    y_map = {year_month: per_month_count["count"].loc[year_month]
+             for year_month in per_month_count.index}
+
     # x = per_month_count.apply(
     #    axis="columns", func=lambda x: "{:04d}-{:02d}".format(x["year"], x["month"])),  # 2018-01, etc.
-    y = list(per_month_count["count"])
+    y = [
+        y_map[year_month] if year_month in y_map else 0
+        for year_month in all_x
+    ]
+    # TODO: whats the correct value?
     x = list(range(0, len(y)))
     return {
         "data": [{
-            # "x": x,
             "x": x,
             "y": y,
             "type": "bar",
