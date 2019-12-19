@@ -26,7 +26,7 @@ def search_to_sql_like(search_terms):
 
 
 MAX_DATE = datetime.now().year
-MIN_DATE = 2018
+MIN_DATE = 2016
 
 DEFAULT_DATA = [
     {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
@@ -210,9 +210,3 @@ def update_graph(results_dump):
             }
         }
     }
-
-
-# if __name__ == '__main__':
-#    app.run_server(debug=True)
-
-app.run = app.run_server
