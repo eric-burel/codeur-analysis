@@ -14,7 +14,8 @@ from figures import empty_figure
 from db import connect
 
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [
+    'https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 connection = connect()
@@ -32,50 +33,70 @@ DEFAULT_DATA = [
 ]
 
 
-app.layout = html.Div(children=[
-    html.H1(children='Codeur.com analysis'),
-
-    # html.Div(children='''
-    #    Dash: A web application framework for Python.
-    # '''),
-    dcc.Input(
-        id="search-terms",
-        placeholder="search..."
-    ),
-    html.Div(
-        id="results-summary"
-    ),
-    dcc.RangeSlider(
-        id='year-slider',
-        min=MIN_DATE,  # df['year'].min(),
-        max=MAX_DATE,  # df['year'].max(),
-        value=[MIN_DATE, MAX_DATE],
-        marks={str(year): str(year)
-               for year in range(MIN_DATE, MAX_DATE+1, 1)},
-        step=None
-    ),
-    # Date picker version (eg for more precise find)
-    # dcc.DatePickerRange(
-    #    id='year-slider',
-    #    min_date_allowed=datetime(MIN_DATE, 1, 1),  # df['year'].min(),
-    #    max_date_allowed=datetime(MAX_DATE, 12, 1),  # df['year'].max(),
-    #    start_date=datetime(MIN_DATE, 1, 1),  # df['year'].min(),
-    #    end_date=datetime(MAX_DATE, 12, 1),  # df['year'].max(),
-    # ),
-    dcc.Graph(
-        id="yearly-graph",
-        figure=empty_figure("Type a keyword to view projects history")
-        # figure={
-        #    'data': DEFAULT_DATA,
-        #    'layout': {
-        #        'title': 'Project count per month'
-        #    }
-        # }
-    ),
-    # dcc.Graph(id="empty", figure=empty_figure("hello")),
-    # Hidden div inside the app that stores the intermediate value
-    html.Div(id='query-results', style={'display': 'none'})
-])
+app.layout = html.Section(
+    className="section",
+    children=[
+        html.Div(
+            className="container",
+            children=[
+                html.H1(className="title", children='Codeur.com analysis'),
+                # html.Div(children='''
+                #    Dash: A web application framework for Python.
+                # '''),
+                html.Div(className="columns", children=[
+                    html.Div(className="column is-half-desktop", children=[
+                        html.Label(
+                            className="label",
+                            children="Keywords:"
+                        ),
+                        dcc.Input(
+                            className="input",
+                            id="search-terms",
+                            placeholder="search..."
+                        ),
+                    ]),
+                    html.Div(className="column is-half-desktop", children=[
+                        html.Label(
+                            className="label",
+                            children="Period:"
+                        ),
+                        dcc.RangeSlider(
+                            id='year-slider',
+                            min=MIN_DATE,  # df['year'].min(),
+                            max=MAX_DATE,  # df['year'].max(),
+                            value=[MIN_DATE, MAX_DATE],
+                            marks={str(year): str(year)
+                                   for year in range(MIN_DATE, MAX_DATE+1, 1)},
+                            step=None
+                        ),
+                    ]),
+                ]),
+                html.P(
+                    id="results-summary"
+                ),
+            ]),
+        # Date picker version (eg for more precise find)
+        # dcc.DatePickerRange(
+        #    id='year-slider',
+        #    min_date_allowed=datetime(MIN_DATE, 1, 1),  # df['year'].min(),
+        #    max_date_allowed=datetime(MAX_DATE, 12, 1),  # df['year'].max(),
+        #    start_date=datetime(MIN_DATE, 1, 1),  # df['year'].min(),
+        #    end_date=datetime(MAX_DATE, 12, 1),  # df['year'].max(),
+        # ),
+        dcc.Graph(
+            id="yearly-graph",
+            figure=empty_figure("Type a keyword to view projects history")
+            # figure={
+            #    'data': DEFAULT_DATA,
+            #    'layout': {
+            #        'title': 'Project count per month'
+            #    }
+            # }
+        ),
+        # dcc.Graph(id="empty", figure=empty_figure("hello")),
+        # Hidden div inside the app that stores the intermediate value
+        html.Div(id='query-results', style={'display': 'none'})
+    ])
 
 
 # SQL Query + intermediate storage of result depending on inputs
