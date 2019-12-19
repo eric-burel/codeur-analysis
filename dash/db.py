@@ -1,6 +1,7 @@
 # Connect to the db
 import atexit
 import psycopg2
+from os import sys
 
 
 def connect():
