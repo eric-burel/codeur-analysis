@@ -17,7 +17,7 @@ from db import connect
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-connect()
+connection = connect()
 
 
 def search_to_sql_like(search_terms):
@@ -191,5 +191,7 @@ def update_graph(results_dump):
     }
 
 
-if __name__ == '__main__':
-    app.run_server(debug=True)
+# if __name__ == '__main__':
+#    app.run_server(debug=True)
+
+app.run = app.run_server

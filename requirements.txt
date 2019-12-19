@@ -17,6 +17,7 @@ dash-table==4.5.1
 decorator==4.4.1
 Flask==1.1.1
 Flask-Compress==1.4.0
+Flask-Failsafe==0.2
 fr-core-news-sm==2.2.5
 future==0.18.2
 idna==2.8
