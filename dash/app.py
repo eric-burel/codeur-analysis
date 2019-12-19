@@ -7,17 +7,32 @@ from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 from datetime import datetime
 import json
+import os
 from os import sys
 import pandas as pd
 import utils
 from figures import empty_figure
 from db import connect
+import dash_auth
 
+USERS = json.loads(
+    os.environ.get('USERS_BASIC_DUMP',
+                   json.dumps([
+                       ("admin", "admin")
+                   ]))
+)
 
 external_stylesheets = [
     'https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+dash_auth.BasicAuth(
+    app,
+    USERS
+)
+
+
+# db connection
 connection = connect()
 
 
@@ -40,6 +55,10 @@ app.layout = html.Section(
             className="container",
             children=[
                 html.H1(className="title", children='Codeur.com analysis'),
+                html.Button(
+                    className="button is-small logout-button",
+                    children="Logout"
+                ),
                 # html.Div(children='''
                 #    Dash: A web application framework for Python.
                 # '''),
