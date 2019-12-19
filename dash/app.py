@@ -4,51 +4,20 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
+from dash.exceptions import PreventUpdate
 from datetime import datetime
 import json
-import atexit
 from os import sys
 import pandas as pd
 import utils
-
-# Connect to the db
-import psycopg2
-connection = None
-
-try:
-    connection = psycopg2.connect(user="postgres",
-                                  password="admin123",
-                                  host="127.0.0.1",
-                                  port="5432",
-                                  database="postgres")
-
-    # Print PostgreSQL Connection properties
-    print(connection.get_dsn_parameters(), "\n")
-    cursor = connection.cursor()
-    # Print PostgreSQL version
-    cursor.execute("SELECT version();")
-    record = cursor.fetchone()
-    print("You are connected to - ", record, "\n")
-    cursor.close()
-
-except (Exception, psycopg2.Error) as error:
-    print("Error while connecting to PostgreSQL", error)
-    sys.exit()
-
-
-def close_connection():
-    # closing database connection.
-    if(connection):
-        connection.close()
-        print("PostgreSQL connection is closed")
-
-
-atexit.register(close_connection)
+from figures import empty_figure
+from db import connect
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+connect()
 
 
 def search_to_sql_like(search_terms):
@@ -61,6 +30,7 @@ MIN_DATE = 2016
 DEFAULT_DATA = [
     {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
 ]
+
 
 app.layout = html.Div(children=[
     html.H1(children='Codeur.com analysis'),
@@ -94,13 +64,15 @@ app.layout = html.Div(children=[
     # ),
     dcc.Graph(
         id="yearly-graph",
-        figure={
-            'data': DEFAULT_DATA,
-            'layout': {
-                'title': 'Project count per month'
-            }
-        }
+        figure=empty_figure("Type a keyword to view projects history")
+        # figure={
+        #    'data': DEFAULT_DATA,
+        #    'layout': {
+        #        'title': 'Project count per month'
+        #    }
+        # }
     ),
+    # dcc.Graph(id="empty", figure=empty_figure("hello")),
     # Hidden div inside the app that stores the intermediate value
     html.Div(id='query-results', style={'display': 'none'})
 ])
@@ -113,8 +85,9 @@ app.layout = html.Div(children=[
      Input(component_id='year-slider', component_property='value')]
 )
 def update_output_div(input_value, years):
+    # Update condition
     if input_value is None:
-        return None
+        raise PreventUpdate
 
     start_year, end_year = years
 
@@ -152,10 +125,11 @@ def update_output_div(input_value, years):
     [Input(component_id="query-results", component_property="children")]
 )
 def update_query_summary(results_dump):
+    # Update conditions
     if results_dump is None:
-        return None
+        raise PreventUpdate
     results = json.loads(results_dump)
-    #data = results["data"]
+    # data = results["data"]
     count = results["count"]
     start_year = results["start_year"]
     end_year = results["end_year"]
@@ -169,8 +143,9 @@ def update_query_summary(results_dump):
     [Input(component_id='query-results', component_property="children")]
 )
 def update_graph(results_dump):
+    # Update conditions
     if results_dump is None:
-        return {"data": DEFAULT_DATA}
+        raise PreventUpdate
     results = json.loads(results_dump)
     # compute ticks
     start_year = results["start_year"]
