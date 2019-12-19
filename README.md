@@ -68,6 +68,16 @@ Run it in Docker.
 docker start mode-bridge
 ```
 
+## Heroku deployment
+
+Please check that `requirements.txt` is correctly set in the `dash` folder.
+
+Push the subfolder:
+
+```
+    git subtree push --prefix dash heroku master
+```
+
 ## TODO
 
 - [x] Run a postgre db
