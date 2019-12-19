@@ -1,7 +1,7 @@
 # Connect to the db
 import atexit
 import psycopg2
-from os import sys
+import os
 
 
 def connect():
@@ -16,11 +16,16 @@ def connect():
     atexit.register(close_connection)
 
     try:
-        connection = psycopg2.connect(user="postgres",
-                                      password="admin123",
-                                      host="127.0.0.1",
-                                      port="5432",
-                                      database="postgres")
+        connection = psycopg2.connect(user=os.environ.get("POSTGRES_USER", "postgres"),
+                                      password=os.environ.get(
+                                          "POSTGRES_PASSWORD", "admin123"),
+                                      host=os.environ.get(
+                                          "POSTGRES_HOST", "127.0.0.1"),
+                                      port=os.environ.get(
+                                          "POSTGRES_PORT", "5432"),
+                                      database=os.environ.get(
+                                          "POSTGRES_DATABASE", "postgres")
+                                      )
 
         # Print PostgreSQL Connection properties
         print(connection.get_dsn_parameters(), "\n")
