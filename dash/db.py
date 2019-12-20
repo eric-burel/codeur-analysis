@@ -16,16 +16,11 @@ def connect():
     atexit.register(close_connection)
 
     try:
-        connection = psycopg2.connect(user=os.environ.get("POSTGRES_USER", "postgres"),
-                                      password=os.environ.get(
-                                          "POSTGRES_PASSWORD", "admin123"),
-                                      host=os.environ.get(
-                                          "POSTGRES_HOST", "127.0.0.1"),
-                                      port=os.environ.get(
-                                          "POSTGRES_PORT", "5432"),
-                                      database=os.environ.get(
-                                          "POSTGRES_DATABASE", "postgres")
-                                      )
+        connection = psycopg2.connect(os.environ.get(
+            "DATABASE_URL",
+            "postgres://postgres:admin123@127.0.0.1:5432/postgres"
+        )
+        )
 
         # Print PostgreSQL Connection properties
         print(connection.get_dsn_parameters(), "\n")
