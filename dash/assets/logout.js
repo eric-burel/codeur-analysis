@@ -20,6 +20,7 @@ function logout() {
     return false;
 }
 
+/*
 // Function to watch for an element appaerance in a React context
 function waitForMutation(parentNode, isMatchFunc, handlerFunc, observeSubtree, disconnectAfterMatch) {
     var defaultIfUndefined = function (val, defaultVal) {
@@ -79,3 +80,5 @@ waitForMutation(
     // the first time that isMatchFunc returns true. If it's false, the handler
     // will continue to fire on matches.
     false);
+
+    */

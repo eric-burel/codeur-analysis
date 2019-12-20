@@ -51,8 +51,10 @@ python -m ipykernel install --user --name=myenv
 ### Use Dash
 
 ```
-python dash/app.py
+python dash/server_dev.py
 ```
+
+The Dash Standard Button is provided by https://github.com/lbke/dash-standard-button (see Readme for build instruction). The built tarball can be unzipped and added in the "Dash" folder.
 
 ## Python version
 

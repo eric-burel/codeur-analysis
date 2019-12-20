@@ -3,7 +3,6 @@ import psycopg2.extras
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_standard_button as dsb
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 from datetime import datetime
@@ -15,6 +14,7 @@ import utils
 from figures import empty_figure
 from db import connect
 import dash_auth
+import dash_standard_button as dsb
 
 USERS = json.loads(
     os.environ.get('USERS_BASIC_DUMP',
@@ -55,19 +55,19 @@ app.layout = html.Section(
         html.Div(
             className="container",
             children=[
-                html.H1(className="title", children='Codeur.com analysis'),
-                dsb.StandardButton(
-                    #className="button is-small whatever",
-                    onClick="logout();",
-                    children="Logout 2"
+                html.Div(
+                    className="level",
+                    children=[
+                        html.H1(className="title",
+                                children='Codeur.com analysis'),
+                        dsb.StandardButton(
+                            className="button is-small logout-button",
+                            onClick="logout();",
+                            children="Logout"
+                        ),
+
+                    ]
                 ),
-                html.Button(
-                    className="button is-small logout-button",
-                    children="Logout"
-                ),
-                # html.Div(children='''
-                #    Dash: A web application framework for Python.
-                # '''),
                 html.Div(className="columns", children=[
                     html.Div(className="column is-half-desktop", children=[
                         html.Label(
