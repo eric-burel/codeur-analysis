@@ -3,6 +3,7 @@ import psycopg2.extras
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_standard_button as dsb
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 from datetime import datetime
@@ -55,6 +56,11 @@ app.layout = html.Section(
             className="container",
             children=[
                 html.H1(className="title", children='Codeur.com analysis'),
+                dsb.StandardButton(
+                    #className="button is-small whatever",
+                    onClick="logout();",
+                    children="Logout 2"
+                ),
                 html.Button(
                     className="button is-small logout-button",
                     children="Logout"
