@@ -44,14 +44,14 @@ You need to create a Kernel for the local virtual env.
 https://janakiev.com/blog/jupyter-virtual-envs/
 
 ```
-pip install --user ipykernel
+python -m pip install --user ipykernel
 python -m ipykernel install --user --name=myenv
 ```
 
 ### Use Dash
 
 ```
-python dash/server_dev.py
+python dash/dev_server.py
 ```
 
 The Dash Standard Button is provided by https://github.com/lbke/dash-standard-button (see Readme for build instruction). The built tarball can be unzipped and added in the "Dash" folder.
